@@ -1,17 +1,17 @@
 import java.util.Random;
 
-class Matriz{
+class MatrizOtimizada{
 	private int[][] mat;
 	private int tamLinha;
 	private int tamColuna;
 
-	Matriz(){
+	MatrizOtimizada(){
 		mat = new int[6][6];
 		this.setTamanhoLinha(6);	
 		this.setTamanhoColuna(6);
 	}
 
-	Matriz(int numLinhas, int numColunas){
+	MatrizOtimizada(int numLinhas, int numColunas){
 		mat = new int[numLinhas][numColunas];
 		this.setTamanhoLinha(numLinhas);	
 		this.setTamanhoColuna(numColunas);
@@ -78,11 +78,12 @@ class Matriz{
 		return ordem;
 	}	
 
-	private int detOrdem1(Matriz mat){
+	private int detOrdem1(MatrizOtimizada mat){
 		return mat.getValor(0,0);
+
 	}
 	
-	private int detOrdem2(Matriz mat){
+	private int detOrdem2(MatrizOtimizada mat){
 		int diagonalP, diagonalI;
 
 		diagonalP = mat.getValor(0,0) * mat.getValor(1,1);		
@@ -103,7 +104,7 @@ class Matriz{
 		return sinal;		
 	}
 
-	public void copiaMatrizMaiorParaMenor(Matriz maior,Matriz menor,int isqn,int jsqn){
+	public void copiaMatrizMaiorParaMenor(MatrizOtimizada maior,MatrizOtimizada menor,int isqn,int jsqn){
 		int contAi,contAj,contBi,contBj,temp,numL,numC;
 		numL = menor.getTamanhoLinha();
 		numC = menor.getTamanhoColuna();
@@ -152,7 +153,7 @@ class Matriz{
 				if(this.getValor(contadorColuna, contadorLinha) == 0){
 					numeroDeZeros++;
 				}
-				if(numerosDeZeros > numeroMZeros){
+				if(numeroDeZeros >= numeroMZeros){
 					numeroMZeros = numeroDeZeros;
 					zerosColuna = contadorColuna;
 				}
@@ -160,37 +161,37 @@ class Matriz{
 		}
 		return zerosColuna;
 	}
-	public boolean UsaLinha(int zerosLinha, int zeroColuna){
+	public boolean UsaLinha(int zerosLinha, int zerosColuna){
 		boolean ehLinha = true;
 		if(zerosLinha >= zerosColuna){
-			ehLinha = true;
+			return true;
 		}else {
-			ehLinha = false;
+			return false;
 		}
-		return ehLinha;
+
 	}
 
-	private int detOrdemN(Matriz mat, int parametro, boolean ehLinha){
-		int sinal,cofator,detTemp,resposta,contC,numL,numC;
-		Matriz matmenor;
+	private int detOrdemN(MatrizOtimizada mat, boolean ehLinha,int zerosLinha, int zerosColuna){
+		int sinal,cofator,detTemp,resposta,contC,contL,numL,numC;
+		MatrizOtimizada matmenor;
 		numL = this.getTamanhoLinha();
 		numC = this.getTamanhoColuna();
 		resposta = 0;
 			if(ehLinha){
-				for(contC = 0; contC < parametro; contC++){
-					cofator = mat.getValor(0,contC);
-					sinal = this.calculaSinal(0,contC);
-					matmenor = new Matriz(numL-1,numC-1);
+				for(contC = 0; contC < numL; contC++){
+					cofator = mat.getValor(zerosLinha,contC);
+					sinal = this.calculaSinal(zerosLinha,contC);
+					matmenor = new MatrizOtimizada(numL-1,numC-1);
 					this.copiaMatrizMaiorParaMenor(mat,matmenor,0,contC);
 					detTemp = matmenor.determinante();
 					resposta = resposta + (cofator * sinal * detTemp);
 				}
 				return (resposta);
 			}else {
-				for(contC = 0; contC < parametro; contC++){
-					cofator = mat.getValor(0,contC);
-					sinal = this.calculaSinal(0,contC);
-					matmenor = new Matriz(numL-1,numC-1);
+				for(contL = 0; contL < numC; contL++){
+					cofator = mat.getValor(zerosColuna,contC);
+					sinal = this.calculaSinal(zerosColuna,contC);
+					matmenor = new MatrizOtimizada(numL-1,numC-1);
 					this.copiaMatrizMaiorParaMenor(mat,matmenor,0,contC);
 					detTemp = matmenor.determinante();
 					resposta = resposta + (cofator * sinal * detTemp);
