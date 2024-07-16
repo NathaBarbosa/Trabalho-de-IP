@@ -1,26 +1,29 @@
-class Main{
+public class Main{
 		
 	public static void main(String[] args){
-		Random random = new Random(seed:65)
-		MatrizOtimizada mat1,mat2;
-		int det;
-		long inicio, fim, resultado;	
+		MatrizOtimizada mat1;
+		int det1,det2, ordem;
+		long inicioBaseLine ,inicioOtimizado, fimBaseLine,fimOtimizado, resultadoBaseLine, resultadoOtimizado;
 
-		mat1 = new MatrizOtimizada(5,5);
-		mat1.inicializaRandomico(9);
+
+        ordem = 11;
+
+		mat1 = new MatrizOtimizada(ordem,ordem);
+		mat1.inicializaRandomico(ordem);
 		mat1.imprime();
-		inicio = System.currentTimeMillis();
-		det = mat1.determinante();
-		fim = System.currentTimeMillis();
-		resultado = fim - inicio;
-		System.out.println(det);
-		System.out.println(resultado);
-		
-		
-
-		
-
-
+        inicioBaseLine = System.currentTimeMillis();
+        det1= mat1.determinanteBaseline();
+        fimBaseLine= System.currentTimeMillis();
+		resultadoBaseLine = fimBaseLine - inicioBaseLine;
+        inicioOtimizado  = System.currentTimeMillis();
+        det2 = mat1.determinanteOtimizado();
+        fimOtimizado= System.currentTimeMillis();
+		resultadoOtimizado = fimOtimizado - inicioOtimizado;
+        
+        System.out.println(det1);
+		System.out.println(det2);
+		System.out.println(resultadoBaseLine);
+        System.out.println(resultadoOtimizado);
 	}
 
 }
