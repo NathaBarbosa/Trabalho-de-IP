@@ -1,13 +1,13 @@
 class Main{
 		
 	public static void main(String[] args){
-		Matriz mat1,mat2;
+		Random random = new Random(seed:65)
+		MatrizOtimizada mat1,mat2;
 		int det;
 		long inicio, fim, resultado;	
 
-		mat1 = new Matriz(11,11);
-		mat1.inicializaRandomico();
-		
+		mat1 = new MatrizOtimizada(5,5);
+		mat1.inicializaRandomico(9);
 		mat1.imprime();
 		inicio = System.currentTimeMillis();
 		det = mat1.determinante();
@@ -17,25 +17,8 @@ class Main{
 		System.out.println(resultado);
 		
 		
-		/*
-		
-		array com as ordens [3,5,7,9,11,13]
-		
-		enquanto tiver ordem no array faca
-			ordemMatriz = ordemDaVez
-			
-		 	para cada ordem faca
-		 		cria a matriz com a ordem
-		 		para cara repeticao faca	
-		 			inicializa randomicamente com a ordem	
-		 			calculaDet com metodoBase
-		 			calculaDet com otimiV1
-		 			calculaDet com otimiV2
-		 		fim-para
-		 	fim-para	
-		 		
 
-		*/
+		
 
 
 	}
