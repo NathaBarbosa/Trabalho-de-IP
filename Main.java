@@ -20,10 +20,10 @@ public class Main{
         fimOtimizado= System.currentTimeMillis();
 		resultadoOtimizado = fimOtimizado - inicioOtimizado;
         
-        System.out.println(det1);
-		System.out.println(det2);
-		System.out.println(resultadoBaseLine);
-        System.out.println(resultadoOtimizado);
+        System.out.println("resultado do determinante do ProgramaBase: " + det1);
+		System.out.println("resultado do determinante do Programa otimizado: " + det2);
+		System.out.println("tempo de execucao do programa base em milisegundos: " + resultadoBaseLine);
+        System.out.println("tempo de execucao do programa otimizado em millisegundos: " + resultadoOtimizado);
 	}
 
 }
