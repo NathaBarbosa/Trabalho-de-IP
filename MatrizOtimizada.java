@@ -55,7 +55,7 @@ class MatrizOtimizada{
 
 	public void inicializaRandomico(int max_rand){
 		int conti,contj, novoValor;
-		Random gerador = new Random();
+		Random gerador = new Random(65);
 		for(conti = 0; conti < this.getTamanhoLinha(); conti++){
 			for(contj = 0; contj < this.getTamanhoColuna(); contj++){
 				novoValor = gerador.nextInt(max_rand);
@@ -150,7 +150,7 @@ class MatrizOtimizada{
 		for(int contadorColuna = 0; contadorColuna < this.getTamanhoColuna(); contadorColuna++){
 			int numeroDeZeros = 0;
 			for(int contadorLinha = 0; contadorLinha < this.getTamanhoLinha(); contadorLinha++){
-				if(this.getValor(contadorColuna, contadorLinha) == 0){
+				if(this.getValor(contadorLinha, contadorColuna) == 0){
 					numeroDeZeros++;
 				}
 				if(numeroDeZeros >= numeroMZeros){
