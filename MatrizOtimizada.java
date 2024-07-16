@@ -162,37 +162,34 @@ class MatrizOtimizada{
 		return zerosColuna;
 	}
 	public boolean UsaLinha(int zerosLinha, int zerosColuna){
-		boolean ehLinha = true;
-		if(zerosLinha >= zerosColuna){
-			return true;
-		}else {
-			return false;
-		}
-
+		return zerosLinha >= zerosColuna;
 	}
 
-	private int detOrdemN(MatrizOtimizada mat, boolean ehLinha,int zerosLinha, int zerosColuna){
+	private int detOrdemN(MatrizOtimizada mat){
 		int sinal,cofator,detTemp,resposta,contC,contL,numL,numC;
 		MatrizOtimizada matmenor;
 		numL = this.getTamanhoLinha();
 		numC = this.getTamanhoColuna();
+		int zerosLinha = verificaLinha();
+		int zerosColuna = verificaColuna();
+		boolean ehLinha = UsaLinha(zerosLinha, zerosColuna);
 		resposta = 0;
 			if(ehLinha){
 				for(contC = 0; contC < numL; contC++){
 					cofator = mat.getValor(zerosLinha,contC);
 					sinal = this.calculaSinal(zerosLinha,contC);
 					matmenor = new MatrizOtimizada(numL-1,numC-1);
-					this.copiaMatrizMaiorParaMenor(mat,matmenor,0,contC);
+					this.copiaMatrizMaiorParaMenor(mat,matmenor,zerosLinha,contC);
 					detTemp = matmenor.determinante();
 					resposta = resposta + (cofator * sinal * detTemp);
 				}
 				return (resposta);
 			}else {
 				for(contL = 0; contL < numC; contL++){
-					cofator = mat.getValor(zerosColuna,contC);
-					sinal = this.calculaSinal(zerosColuna,contC);
+					cofator = mat.getValor(contL, zerosColuna);
+					sinal = this.calculaSinal(contL,zerosColuna);
 					matmenor = new MatrizOtimizada(numL-1,numC-1);
-					this.copiaMatrizMaiorParaMenor(mat,matmenor,0,contC);
+					this.copiaMatrizMaiorParaMenor(mat,matmenor,contL,zerosColuna);
 					detTemp = matmenor.determinante();
 					resposta = resposta + (cofator * sinal * detTemp);
 				}
@@ -213,7 +210,7 @@ class MatrizOtimizada{
 				     break;
 			    case 2:  det = this.detOrdem2(this);;
 				     break;
-			    default: det = this.detOrdemN(this);;
+			    default: det = this.detOrdemN(this);
 				     break;
 			}
 			
