@@ -5,13 +5,13 @@ class MatrizOtimizada{
 	private int tamLinha;
 	private int tamColuna;
 
-	Matriz(){
+	MatrizOtimizada(){
 		mat = new int[6][6];
 		this.setTamanhoLinha(6);	
 		this.setTamanhoColuna(6);
 	}
 
-	Matriz(int numLinhas, int numColunas){
+	MatrizOtimizada(int numLinhas, int numColunas){
 		mat = new int[numLinhas][numColunas];
 		this.setTamanhoLinha(numLinhas);	
 		this.setTamanhoColuna(numColunas);
@@ -78,11 +78,12 @@ class MatrizOtimizada{
 		return ordem;
 	}	
 
-	private int detOrdem1(Matriz mat){
+	private int detOrdem1(MatrizOtimizada mat){
 		return mat.getValor(0,0);
+
 	}
 	
-	private int detOrdem2(Matriz mat){
+	private int detOrdem2(MatrizOtimizada mat){
 		int diagonalP, diagonalI;
 
 		diagonalP = mat.getValor(0,0) * mat.getValor(1,1);		
@@ -103,7 +104,7 @@ class MatrizOtimizada{
 		return sinal;		
 	}
 
-	public void copiaMatrizMaiorParaMenor(Matriz maior,Matriz menor,int isqn,int jsqn){
+	public void copiaMatrizMaiorParaMenor(MatrizOtimizada maior,MatrizOtimizada menor,int isqn,int jsqn){
 		int contAi,contAj,contBi,contBj,temp,numL,numC;
 		numL = menor.getTamanhoLinha();
 		numC = menor.getTamanhoColuna();
@@ -125,10 +126,48 @@ class MatrizOtimizada{
 			contAi++;
 		}
 	}
+	//metodo para verficar qual linha possue mais zeros:
+	public int verificaLinha(){
+		int zerosLinha = 0;
+		int zerosAtuais = 0;
+		for(int contadorLinha = 0; contadorLinha < this.getTamanhoLinha(); contadorLinha++){
+			int quantidadeDeZeros = 0;
+            for(int contadorColuna = 0; contadorColuna < this.getTamanhoColuna(); contadorColuna++){
+                if(this.getValor(contadorLinha , contadorColuna) == 0){
+                    quantidadeDeZeros++;
+                }
+            }
+            if(quantidadeDeZeros >= zerosAtuais){
+                zerosAtuais = quantidadeDeZeros;
+                zerosLinha = contadorLinha;
+            }
+		}
+		return zerosLinha;
+	}
+	public int verificaColuna(){
+		int zerosColuna = 0;
+		int numeroMZeros = 0;
+		for(int contadorColuna = 0; contadorColuna < this.getTamanhoColuna(); contadorColuna++){
+			int numeroDeZeros = 0;
+			for(int contadorLinha = 0; contadorLinha < this.getTamanhoLinha(); contadorLinha++){
+				if(this.getValor(contadorLinha, contadorColuna) == 0){
+					numeroDeZeros++;
+				}
+			}
+            if(numeroDeZeros >= numeroMZeros){
+                numeroMZeros = numeroDeZeros;
+                zerosColuna = contadorColuna;
+            }
+		}
+		return zerosColuna;
+	}
+	public boolean UsaLinha(int zerosLinha, int zerosColuna){
+		return zerosLinha >= zerosColuna;
+	}
 
-	private int detOrdemN(Matriz mat){
+	private int detOrdemN(MatrizOtimizada mat){
 		int sinal,cofator,detTemp,resposta,contC,numL,numC;
-		Matriz matmenor;
+		MatrizOtimizada matmenor;
 		numL = this.getTamanhoLinha();
 		numC = this.getTamanhoColuna();
 		
@@ -136,15 +175,53 @@ class MatrizOtimizada{
 		for(contC = 0; contC < mat.getTamanhoColuna(); contC++){
 			cofator = mat.getValor(0,contC);
 			sinal = this.calculaSinal(0,contC);
-			matmenor = new Matriz(numL-1,numC-1);
+			matmenor = new MatrizOtimizada(numL-1,numC-1);
 			this.copiaMatrizMaiorParaMenor(mat,matmenor,0,contC);
-			detTemp = matmenor.determinante();
+			detTemp = matmenor.determinanteBaseline();
 			resposta = resposta + (cofator * sinal * detTemp);
 		}
 		return (resposta);
 	}
 
-	public int determinante(){
+	private int detOrdemNV2(MatrizOtimizada mat){
+		int sinal,cofator,detTemp,resposta,contC,contL,numL,numC;
+		MatrizOtimizada matmenor;
+		numL = this.getTamanhoLinha();
+		numC = this.getTamanhoColuna();
+		int zerosLinha = verificaLinha();
+		int zerosColuna = verificaColuna();
+		boolean ehLinha = UsaLinha(zerosLinha, zerosColuna);
+		resposta = 0;
+			if(ehLinha){
+				for(contC = 0; contC < numL; contC++){
+					cofator = mat.getValor(zerosLinha,contC);
+                    if(mat.getValor(zerosLinha , contC) != 0){
+                        sinal = this.calculaSinal(zerosLinha,contC);
+                        matmenor = new MatrizOtimizada(numL-1,numC-1);
+                        this.copiaMatrizMaiorParaMenor(mat,matmenor,zerosLinha,contC);
+                        detTemp = matmenor.determinanteOtimizado();
+                        resposta = resposta + (cofator * sinal * detTemp);
+                    }
+				}
+				return (resposta);
+			}else {
+				for(contL = 0; contL < numC; contL++){
+                    if(mat.getValor(contL, zerosColuna) != 0){
+
+					cofator = mat.getValor(contL, zerosColuna);
+					sinal = this.calculaSinal(contL,zerosColuna);
+					matmenor = new MatrizOtimizada(numL-1,numC-1);
+					this.copiaMatrizMaiorParaMenor(mat,matmenor,contL,zerosColuna);
+					detTemp = matmenor.determinanteOtimizado();
+					resposta = resposta + (cofator * sinal * detTemp);
+				    }
+                }
+				return (resposta);
+
+			}
+		
+	}
+	public int determinanteBaseline(){
 		int ordem,det;
 
 		ordem = this.retorneOrdem();
@@ -156,7 +233,7 @@ class MatrizOtimizada{
 				     break;
 			    case 2:  det = this.detOrdem2(this);;
 				     break;
-			    default: det = this.detOrdemN(this);;
+			    default: det = this.detOrdemN(this);
 				     break;
 			}
 			
@@ -167,5 +244,31 @@ class MatrizOtimizada{
 
 		return det;
 	}
+
+    public int determinanteOtimizado(){
+		int ordem,det;
+
+		ordem = this.retorneOrdem();
+		det = 0;
+
+		if(ordem > 0){
+			switch (ordem) {
+			    case 1:  det = this.detOrdem1(this);
+				     break;
+			    case 2:  det = this.detOrdem2(this);;
+				     break;
+			    default: det = this.detOrdemNV2(this);
+				     break;
+			}
+			
+		}
+		else{
+			System.out.println("Matriz nao eh quadrada!! retornando 0");
+		}
+
+		return det;
+	}
+
+   
 
 }
