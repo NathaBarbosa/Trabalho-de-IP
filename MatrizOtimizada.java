@@ -203,7 +203,7 @@ class MatrizOtimizada{
                         resposta = resposta + (cofator * sinal * detTemp);
                     }
 				}
-				return (resposta);
+				
 			}else {
 				for(contL = 0; contL < numC; contL++){
                     if(mat.getValor(contL, zerosColuna) != 0){
@@ -216,9 +216,10 @@ class MatrizOtimizada{
 					resposta = resposta + (cofator * sinal * detTemp);
 				    }
                 }
-				return (resposta);
+				
 
 			}
+			return resposta;
 		
 	}
 	public int determinanteBaseline(){
@@ -243,7 +244,7 @@ class MatrizOtimizada{
 		}
 
 		return det;
-	}
+		}
 
     public int determinanteOtimizado(){
 		int ordem,det;
